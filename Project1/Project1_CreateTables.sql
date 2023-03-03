@@ -8,38 +8,66 @@ CREATE TABLE Games(
     visitorTeamAbbr VARCHAR2(3),
     CONSTRAINT pk_Games_gameId PRIMARY KEY (gameId)
 );
-insert into games values(123,1,2,TO_DATE('09/09/2021','MM/DD/YYYY'),
-TO_TIMESTAMP ('09/09/2021 14:10:10', 'MM/DD/YYYY HH24:MI:SS'),'AA','BB')
-
-
-
-
-
 --truncate table games;
 select * from games;
 
+--------------------------------------------------------------------------------
+/*
+TABLE NAME-Plays
 
-select sysdate from dual
-select TO_DATE('09/09/2021','DD/MM/YYYY') from dual;
+ALTER TABLE Plays DROP CONSTRAINT pk_Plays_gameId_playId;
+ALTER TABLE Plays DROP CONSTRAINT fk_Plays_Game;
+DROP Table Plays;
 
-
-
-SELECT TO_TIMESTAMP ('14:10:10', 'HH24:MI:SS')
-   FROM DUAL;
-
-
-SELECT TOTIME(
-    '09/09/2021',
-    'MM/DD/YYYY',
-     'NLS_DATE_LANGUAGE = American')
-     FROM DUAL;
-
-TO_DATE('
----------
-15-JAN-89
+*/
 
 
+--------------------------------------------------------------------------------
+CREATE TABLE Plays (
+    gameId NUMBER(10),
+    playId NUMBER(10),
+    playDescription VARCHAR2(4000),
+    quarter NUMBER(2),
+    down NUMBER(1),
+    yardsToGo NUMBER(2),
+    possessionTeam VARCHAR2(3),
+    defensiveTeam VARCHAR2(3),
+    yardlineSide VARCHAR2(3),
+    yardlineNumber NUMBER(3),
+    gameClock VARCHAR2(5),
+    preSnapHomeScore NUMBER(3),
+    preSnapVisitorScore NUMBER(3),
+    passResult VARCHAR2(2),
+    penaltyYards NUMBER(2),
+    prePenaltyPlayResult NUMBER(3),
+    playResult NUMBER(3),
+    foulName1 VARCHAR2(100),
+    foulName2 VARCHAR2(100),
+    foulName3 VARCHAR2(100),
+    foulNFLId1 NUMBER(10),
+    foulNFLId2 NUMBER(10),
+    foulNFLId3 NUMBER(10),
+    absoluteYardlineNumber NUMBER(3),
+    offenseFormation VARCHAR2(100),
+    personnelO VARCHAR2(100),
+    defendersInTheBox NUMBER(2),
+    personnelD VARCHAR2(100),
+    dropbackType VARCHAR2(100),
+    pff_playAction CHAR(1),
+    pff_passCoverage VARCHAR2(100),
+    pff_passCoverageType VARCHAR2(10),
+    CONSTRAINT pk_Plays_gameId_playId PRIMARY KEY (gameId, playId),
+    CONSTRAINT fk_Plays_Game FOREIGN KEY (gameId) REFERENCES Games(gameId) ON DELETE CASCADE
+);
+--------------------------------------------------------------------------------
 
-Value
----------
-01-JAN-16
+
+--truncate table plays;
+select * from plays;
+select count(*) from plays;
+
+
+
+
+
+
