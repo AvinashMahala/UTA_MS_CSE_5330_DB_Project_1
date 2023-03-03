@@ -1,0 +1,146 @@
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>TABLE NAME-Games
+SQL>
+SQL>gameId: Game identifier, unique (numeric)
+SQL>season: Season of game
+SQL>week: Week of game
+SQL>gameDate: Game Date (time, mm/dd/yyyy)
+SQL>gameTimeEastern: Start time of game (time, HH:MM:SS, EST)
+SQL>homeTeamAbbr: Home team three-letter code (text)
+SQL>visitorTeamAbbr: Visiting team three-letter code (text)
+SQL>*/
+SQL> CREATE TABLE Games(
+  2      gameId NUMBER(10),
+  3      season NUMBER(4),
+  4      week NUMBER(2),
+  5      gameDate DATE,
+  6      gameTimeEastern TIMESTAMP,
+  7      homeTeamAbbr VARCHAR2(3),
+  8      visitorTeamAbbr VARCHAR2(3),
+  9      CONSTRAINT pk_Games_gameId PRIMARY KEY (gameId)
+ 10  );
+
+Table GAMES created.
+
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>TABLE NAME-Plays
+SQL>*/
+SQL> --------------------------------------------------------------------------------
+SQL> CREATE TABLE Plays (
+  2      gameId NUMBER(10),
+  3      playId NUMBER(10),
+  4      playDescription VARCHAR2(4000),
+  5      quarter NUMBER(2),
+  6      down NUMBER(1),
+  7      yardsToGo NUMBER(2),
+  8      possessionTeam VARCHAR2(3),
+  9      defensiveTeam VARCHAR2(3),
+ 10      yardlineSide VARCHAR2(3),
+ 11      yardlineNumber NUMBER(3),
+ 12      gameClock VARCHAR2(5),
+ 13      preSnapHomeScore NUMBER(3),
+ 14      preSnapVisitorScore NUMBER(3),
+ 15      passResult VARCHAR2(2),
+ 16      penaltyYards NUMBER(2),
+ 17      prePenaltyPlayResult NUMBER(3),
+ 18      playResult NUMBER(3),
+ 19      foulName1 VARCHAR2(100),
+ 20      foulName2 VARCHAR2(100),
+ 21      foulName3 VARCHAR2(100),
+ 22      foulNFLId1 NUMBER(10),
+ 23      foulNFLId2 NUMBER(10),
+ 24      foulNFLId3 NUMBER(10),
+ 25      absoluteYardlineNumber NUMBER(3),
+ 26      offenseFormation VARCHAR2(100),
+ 27      personnelO VARCHAR2(100),
+ 28      defendersInTheBox NUMBER(2),
+ 29      personnelD VARCHAR2(100),
+ 30      dropbackType VARCHAR2(100),
+ 31      pff_playAction CHAR(1),
+ 32      pff_passCoverage VARCHAR2(100),
+ 33      pff_passCoverageType VARCHAR2(10),
+ 34      CONSTRAINT pk_Plays_gameId_playId PRIMARY KEY (gameId, playId),
+ 35      CONSTRAINT fk_Plays_Game FOREIGN KEY (gameId) REFERENCES Games(gameId) ON DELETE CASCADE
+ 36  );
+
+Table PLAYS created.
+
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>TABLE NAME-Players
+SQL>*/
+SQL> --------------------------------------------------------------------------------
+SQL> CREATE TABLE Players (
+  2      nflId NUMBER(10),
+  3      height VARCHAR2(10),
+  4      weight NUMBER(3),
+  5      birthDate DATE,
+  6      collegeName VARCHAR2(100),
+  7      officialPosition VARCHAR2(100),
+  8      displayName VARCHAR2(100),
+  9      CONSTRAINT pk_Players PRIMARY KEY (nflId)
+ 10  );
+
+Table PLAYERS created.
+
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>TABLE NAME-Scouting
+SQL>*/
+SQL> --------------------------------------------------------------------------------
+SQL> CREATE TABLE Scouting (
+  2      gameId NUMBER(10),
+  3      playId NUMBER(10),
+  4      nflId NUMBER(10),
+  5      pff_role VARCHAR2(100),
+  6      pff_positionLinedUp VARCHAR2(100),
+  7      pff_hit CHAR(1),
+  8      pff_hurry CHAR(1),
+  9      pff_sack CHAR(1),
+ 10      pff_beatenByDefender CHAR(1),
+ 11      pff_hitAllowed CHAR(1),
+ 12      pff_hurryAllowed CHAR(1),
+ 13      pff_sackAllowed CHAR(1),
+ 14      pff_nflIdBlockedPlayer NUMBER(10),
+ 15      pff_blockType VARCHAR2(2),
+ 16      pff_backFieldBlock CHAR(1),
+ 17      CONSTRAINT pk_Scouting PRIMARY KEY (gameId, playId, nflId),
+ 18      CONSTRAINT fk_Scouting_Game FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
+ 19      CONSTRAINT fk_Scouting_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+ 20  );
+
+Table SCOUTING created.
+
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>TABLE NAME-Tracking_Sample_Week
+SQL>*/
+SQL> --------------------------------------------------------------------------------
+SQL> CREATE TABLE Tracking_Sample_Week (
+  2      gameId NUMBER(10),
+  3      playId NUMBER(10),
+  4      nflId NUMBER(10),
+  5      frameId NUMBER(10),
+  6      time TIMESTAMP,
+  7      jerseyNumber NUMBER(3),
+  8      club VARCHAR2(3),
+  9      playDirection VARCHAR2(4),
+ 10      x NUMBER(10,2),
+ 11      y NUMBER(10,2),
+ 12      s NUMBER(10,2),
+ 13      a NUMBER(10,2),
+ 14      dis NUMBER(10,2),
+ 15      o NUMBER(10,2),
+ 16      dir NUMBER(10,2),
+ 17      event VARCHAR2(100),
+ 18      CONSTRAINT pk_Tracking_Sample_Week PRIMARY KEY (gameId, playId, nflId, frameId),
+ 19      CONSTRAINT fk_Tracking_Sample_Week_Plays FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
+ 20      CONSTRAINT fk_Tracking_Sample_Week_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+ 21  );
+
+Table TRACKING_SAMPLE_WEEK created.
+
+SQL> --------------------------------------------------------------------------------
+SQL> Spool off
