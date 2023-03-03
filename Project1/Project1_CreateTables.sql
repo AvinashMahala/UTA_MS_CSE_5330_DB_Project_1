@@ -67,7 +67,53 @@ select * from plays;
 select count(*) from plays;
 
 
+--------------------------------------------------------------------------------
+/*
+TABLE NAME-Players
+*/
+--------------------------------------------------------------------------------
+CREATE TABLE Players (
+    nflId NUMBER(10),
+    height VARCHAR2(10),
+    weight NUMBER(3),
+    birthDate DATE,
+    collegeName VARCHAR2(100),
+    officialPosition VARCHAR2(100),
+    displayName VARCHAR2(100),
+    CONSTRAINT pk_Players PRIMARY KEY (nflId)
+);
+--------------------------------------------------------------------------------
+--truncate table Players;
+select * from Players;
+select count(*) from Players;
 
-
-
+--------------------------------------------------------------------------------
+/*
+TABLE NAME-Scouting
+*/
+--------------------------------------------------------------------------------
+CREATE TABLE Scouting (
+    gameId NUMBER(10),
+    playId NUMBER(10),
+    nflId NUMBER(10),
+    pff_role VARCHAR2(100),
+    pff_positionLinedUp VARCHAR2(100),
+    pff_hit CHAR(1),
+    pff_hurry CHAR(1),
+    pff_sack CHAR(1),
+    pff_beatenByDefender CHAR(1),
+    pff_hitAllowed CHAR(1),
+    pff_hurryAllowed CHAR(1),
+    pff_sackAllowed CHAR(1),
+    pff_nflIdBlockedPlayer NUMBER(10),
+    pff_blockType VARCHAR2(2),
+    pff_backFieldBlock CHAR(1),
+    CONSTRAINT pk_Scouting PRIMARY KEY (gameId, playId, nflId),
+    CONSTRAINT fk_Scouting_Game FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
+    CONSTRAINT fk_Scouting_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+);
+--------------------------------------------------------------------------------
+--truncate table Scouting;
+select * from Scouting;
+select count(*) from Scouting;
 

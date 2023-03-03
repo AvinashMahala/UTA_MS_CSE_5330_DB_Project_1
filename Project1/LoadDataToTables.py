@@ -3,7 +3,7 @@ A Python Script to load the records available in given csv to the created tables
 '''
 import oracledb
 import csv
-from datetime import datetime
+import datetime
 
 def insertDataIntoGamesTable(conn):
     # Open the CSV file and create a CSV reader object
@@ -146,12 +146,70 @@ def insertDataIntoPlayTable(conn):
         print(f"Inserted {rowNum} rows.")
     
        
+def validate(date_text):
+        try:
+            datetime.date.fromisoformat(date_text)
+            return True
+        except ValueError:
+            return False
+
+def formatDateField(dtField):
+    if(dtField=="NA"):
+        return None
+    else:
+        if(validate(dtField)):
+            return dtField
+        else:
+            split=dtField.split("/")
+            dt=split[2]+'-'+split[0]+'-'+split[1]
+            print(dt)
+            return dt
+        
+        
+
+
 
 def insertDataIntoPlayersTable(conn):
     rowNum=0
     
+    with open('.\MySampleData\players.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        cur = conn.cursor()
+        print(f"Inserting Rows......")
+        # Loop through each row in the CSV file
+        for row in reader:
+            # Extract the data from the row
+            nflId = row['nflId']
+            height = row['height']
+            weight = row['weight']
+            birthDate = formatDateField(row['birthDate'])
+            collegeName = row['collegeName']
+            officialPosition = row['officialPosition']
+            displayName = row['displayName']
+    
+            # Define the SQL statement to insert the data into the table
+            sql = "INSERT INTO Players (nflId, height, weight, birthDate, collegeName, officialPosition, displayName) VALUES (:1, :2, :3, TO_DATE(:4, 'YYYY-MM-DD'), :5, :6, :7)"
+    
+            # Define the values to insert into the table
+            values = (nflId, height, weight, birthDate, collegeName, officialPosition, displayName)
+    
+            # Execute the SQL statement with the values
+            cur.execute(sql, values)
+            rowNum+=1
+    
+        # Commit changes to database and close connection
+        conn.commit()
+        print(f"Inserted {rowNum} rows.")
     
     
+
+
+def insertDataIntoScoutingTable(conn):
+    
+    
+
+
+
     
 if(__name__=="__main__"):
     conn = oracledb.connect(user="axm9433", password="Rameswar1996",
@@ -162,6 +220,7 @@ if(__name__=="__main__"):
         print(conn.version)
         #insertDataIntoGamesTable(conn)
         #insertDataIntoPlayTable(conn)
+        #insertDataIntoPlayersTable(conn)
         insertDataIntoPlayersTable(conn)
         
     conn.close()
