@@ -58,17 +58,16 @@ def assignIntNoneOrValue(val):
         return int(val)
     
 def assignStringNoneOrValue(val):
-    if(val=='NA'):
+    if(val=='NA' or 'None'):
         return None
     else:
         return val
 
-def insertDataIntoPlayTable(conn):
+def insertDataIntoPlaysTable(conn):
     # Open CSV file and create a CSV reader object
     rowNum=0
     with open('.\MySampleData\plays.csv') as csv_file:
         reader = csv.DictReader(csv_file)
-        next(reader)
         print(f"Inserting Rows......")
         
         for row in reader:            
@@ -174,6 +173,7 @@ def insertDataIntoPlayersTable(conn):
     
     with open('.\MySampleData\players.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
+        
         cur = conn.cursor()
         print(f"Inserting Rows......")
         # Loop through each row in the CSV file
@@ -199,18 +199,118 @@ def insertDataIntoPlayersTable(conn):
     
         # Commit changes to database and close connection
         conn.commit()
+        cur.close()
         print(f"Inserted {rowNum} rows.")
     
     
 
 
 def insertDataIntoScoutingTable(conn):
+    rowNum=0
+    # Open the CSV file and read its contents
+    cur = conn.cursor()
+    with open('.\MySampleData\pffScoutingData.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+    
+        # Loop through each row in the CSV file
+        for row in reader:
+            # Extract the data from the row
+            gameId = row['gameId']
+            playId = row['playId']
+            nflId = row['nflId']
+            pff_role = row['pff_role']
+            pff_positionLinedUp = row['pff_positionLinedUp']
+            pff_hit = assignStringNoneOrValue(row['pff_hit'])
+            pff_hurry = assignStringNoneOrValue(row['pff_hurry'])
+            pff_sack = assignStringNoneOrValue(row['pff_sack'])
+            pff_beatenByDefender = assignStringNoneOrValue(row['pff_beatenByDefender'])
+            pff_hitAllowed = assignStringNoneOrValue(row['pff_hitAllowed'])
+            pff_hurryAllowed = assignStringNoneOrValue(row['pff_hurryAllowed'])
+            pff_sackAllowed = assignStringNoneOrValue(row['pff_sackAllowed'])
+            pff_nflIdBlockedPlayer = assignIntNoneOrValue(row['pff_nflIdBlockedPlayer'])
+            pff_blockType = assignStringNoneOrValue(row['pff_blockType'])
+            pff_backFieldBlock = assignStringNoneOrValue(row['pff_backFieldBlock'])
+            
+            # Define the SQL statement to insert the data into the table
+            sql = "INSERT INTO Scouting (gameId, playId, nflId, pff_role, pff_positionLinedUp, pff_hit, pff_hurry, pff_sack, pff_beatenByDefender, pff_hitAllowed, pff_hurryAllowed, pff_sackAllowed, pff_nflIdBlockedPlayer, pff_blockType, pff_backFieldBlock) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15);"
+    
+            # Define the values to insert into the table
+            values = (gameId, playId, nflId, pff_role, pff_positionLinedUp, pff_hit, pff_hurry, pff_sack, pff_beatenByDefender, pff_hitAllowed, pff_hurryAllowed, pff_sackAllowed, pff_nflIdBlockedPlayer, pff_blockType, pff_backFieldBlock)
+    
+            # Execute the SQL statement with the values
+            cur.execute(sql, values)
+            rowNum+=1
+            conn.commit()
+    
+        cur.close()
+        print(f"Inserted {rowNum} rows.")
     
     
+def assignFloatNoneOrValue(val):
+    if(val=='NA'):
+        return None
+    else:
+        return float(val)
+
+def insertDataIntoTrackingSampleWeekTable(conn):
+    # create a cursor object
+    cur = conn.cursor()
+    rowNum=0
+    # open the CSV file and read data
+    with open('.\MySampleData\week1.csv', newline='') as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            # define variables for each column in the CSV file
+            gameId = row['gameId']
+            playId = row['playId']
+            nflId = assignIntNoneOrValue(row['nflId'])
+            frameId = row['frameId']
+            time = row['time']
+            jerseyNumber =assignIntNoneOrValue(row['jerseyNumber'])
+            club = row['team']
+            playDirection = row['playDirection']
+            x = assignFloatNoneOrValue(row['x'])
+            y = assignFloatNoneOrValue(row['y'])
+            s = assignFloatNoneOrValue(row['s'])
+            a = assignFloatNoneOrValue(row['a'])
+            dis = assignFloatNoneOrValue(row['dis'])
+            o = assignFloatNoneOrValue(row['o'])
+            dir = assignFloatNoneOrValue(row['dir'])
+            event = assignStringNoneOrValue(row['event'])
+    
+            # define the SQL query to insert the row
+            sql = "INSERT INTO Tracking_Sample_Week(gameId, playId, nflId, frameId, time, jerseyNumber, club, playDirection, x, y, s, a, dis, o, dir, event) VALUES (:gameId, :playId, :nflId, :frameId, TO_TIMESTAMP(:time, 'YYYY-MM-DD\"T\"HH24:MI:SS.FF'), :jerseyNumber, :club, :playDirection, :x, :y, :s, :a, :dis, :o, :dir, :event)"
+    
+            # define the values to insert
+            values = {
+                'gameId': gameId,
+                'playId': playId,
+                'nflId': nflId,
+                'frameId': frameId,
+                'time': time,
+                'jerseyNumber': jerseyNumber,
+                'club': club,
+                'playDirection': playDirection,
+                'x': x,
+                'y': y,
+                's': s,
+                'a': a,
+                'dis': dis,
+                'o': o,
+                'dir': dir,
+                'event': event
+            }
+            cur.execute(sql, values)
+            # commit the changes to the database
+            conn.commit()
+            rowNum+=1
+    
+    # close the cursor object
+    cur.close()
+    print(f"Inserted {rowNum} rows.")
 
 
 
-    
 if(__name__=="__main__"):
     conn = oracledb.connect(user="axm9433", password="Rameswar1996",
                             host="az6F72ldbp1.az.uta.edu", port=1523, service_name="pcse1p.data.uta.edu")
@@ -219,9 +319,10 @@ if(__name__=="__main__"):
         print("Successfully connected to Oracle Database")
         print(conn.version)
         #insertDataIntoGamesTable(conn)
-        #insertDataIntoPlayTable(conn)
+        #insertDataIntoPlaysTable(conn)
         #insertDataIntoPlayersTable(conn)
-        insertDataIntoPlayersTable(conn)
+        #insertDataIntoScoutingTable(conn)
+        insertDataIntoTrackingSampleWeekTable(conn)
         
     conn.close()
     

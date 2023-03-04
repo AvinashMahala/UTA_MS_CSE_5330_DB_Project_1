@@ -63,7 +63,8 @@ CREATE TABLE Plays (
 
 
 --truncate table plays;
-select * from plays;
+select * from plays order by gameid,playid asc
+select * from plays where gameid=2021090900 and playid=97;
 select count(*) from plays;
 
 
@@ -117,3 +118,41 @@ CREATE TABLE Scouting (
 select * from Scouting;
 select count(*) from Scouting;
 
+
+--------------------------------------------------------------------------------
+/*
+TABLE NAME-Tracking_Sample_Week
+
+ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT pk_Tracking_Sample_Week;
+ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Plays;
+ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Players;
+DROP Table Tracking_Sample_Week;
+*/
+--------------------------------------------------------------------------------
+CREATE TABLE Tracking_Sample_Week (
+    gameId NUMBER(10),
+    playId NUMBER(10),
+    nflId NUMBER(10),
+    frameId NUMBER(10),
+    time TIMESTAMP,
+    jerseyNumber NUMBER(3),
+    club VARCHAR2(3),
+    playDirection VARCHAR2(6),
+    x NUMBER(10,2),
+    y NUMBER(10,2),
+    s NUMBER(10,2),
+    a NUMBER(10,2),
+    dis NUMBER(10,2),
+    o NUMBER(10,2),
+    dir NUMBER(10,2),
+    event VARCHAR2(100),
+    CONSTRAINT pk_Tracking_Sample_Week PRIMARY KEY (gameId, playId, nflId, frameId),
+    CONSTRAINT fk_Tracking_Sample_Week_Plays FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
+    CONSTRAINT fk_Tracking_Sample_Week_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+);
+--------------------------------------------------------------------------------
+--truncate table Tracking_Sample_Week;
+select * from Tracking_Sample_Week;
+select count(*) from Tracking_Sample_Week;
+
+--PURGE RECYCLEBIN
