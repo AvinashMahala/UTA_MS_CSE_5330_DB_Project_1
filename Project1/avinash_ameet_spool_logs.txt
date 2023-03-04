@@ -2,13 +2,8 @@ SQL> ---------------------------------------------------------------------------
 SQL> /*
 SQL>TABLE NAME-Games
 SQL>
-SQL>gameId: Game identifier, unique (numeric)
-SQL>season: Season of game
-SQL>week: Week of game
-SQL>gameDate: Game Date (time, mm/dd/yyyy)
-SQL>gameTimeEastern: Start time of game (time, HH:MM:SS, EST)
-SQL>homeTeamAbbr: Home team three-letter code (text)
-SQL>visitorTeamAbbr: Visiting team three-letter code (text)
+SQL>--ALTER TABLE Games DROP CONSTRAINT pk_Games_gameId;
+SQL>--DROP Table Games;
 SQL>*/
 SQL> CREATE TABLE Games(
   2      gameId NUMBER(10),
@@ -23,10 +18,14 @@ SQL> CREATE TABLE Games(
 
 Table GAMES created.
 
-SQL> --------------------------------------------------------------------------------
 SQL> /*
 SQL>TABLE NAME-Plays
+SQL>
+SQL>--ALTER TABLE Plays DROP CONSTRAINT pk_Plays_gameId_playId;
+SQL>--ALTER TABLE Plays DROP CONSTRAINT fk_Plays_Game;
+SQL>--DROP Table Plays;
 SQL>*/
+SQL> 
 SQL> --------------------------------------------------------------------------------
 SQL> CREATE TABLE Plays (
   2      gameId NUMBER(10),
@@ -67,9 +66,11 @@ SQL> CREATE TABLE Plays (
 
 Table PLAYS created.
 
-SQL> --------------------------------------------------------------------------------
 SQL> /*
 SQL>TABLE NAME-Players
+SQL>
+SQL>--ALTER TABLE Players DROP CONSTRAINT pk_Players;
+SQL>--DROP Table Players;
 SQL>*/
 SQL> --------------------------------------------------------------------------------
 SQL> CREATE TABLE Players (
@@ -85,9 +86,13 @@ SQL> CREATE TABLE Players (
 
 Table PLAYERS created.
 
-SQL> --------------------------------------------------------------------------------
 SQL> /*
 SQL>TABLE NAME-Scouting
+SQL>
+SQL>--ALTER TABLE Scouting DROP CONSTRAINT pk_Scouting;
+SQL>--ALTER TABLE Scouting DROP CONSTRAINT fk_Scouting_Game;
+SQL>--ALTER TABLE Scouting DROP CONSTRAINT fk_Scouting_Players;
+SQL>--DROP Table Scouting;
 SQL>*/
 SQL> --------------------------------------------------------------------------------
 SQL> CREATE TABLE Scouting (
@@ -113,9 +118,13 @@ SQL> CREATE TABLE Scouting (
 
 Table SCOUTING created.
 
-SQL> --------------------------------------------------------------------------------
 SQL> /*
 SQL>TABLE NAME-Tracking_Sample_Week
+SQL>
+SQL>--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT pk_Tracking_Sample_Week;
+SQL>--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Plays;
+SQL>--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Players;
+SQL>--DROP Table Tracking_Sample_Week;
 SQL>*/
 SQL> --------------------------------------------------------------------------------
 SQL> CREATE TABLE Tracking_Sample_Week (
@@ -126,7 +135,7 @@ SQL> CREATE TABLE Tracking_Sample_Week (
   6      time TIMESTAMP,
   7      jerseyNumber NUMBER(3),
   8      club VARCHAR2(3),
-  9      playDirection VARCHAR2(4),
+  9      playDirection VARCHAR2(6),
  10      x NUMBER(10,2),
  11      y NUMBER(10,2),
  12      s NUMBER(10,2),
@@ -142,5 +151,3 @@ SQL> CREATE TABLE Tracking_Sample_Week (
 
 Table TRACKING_SAMPLE_WEEK created.
 
-SQL> --------------------------------------------------------------------------------
-SQL> Spool off

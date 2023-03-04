@@ -4,15 +4,21 @@ A Python Script to load the records available in given csv to the created tables
 import oracledb
 import csv
 import datetime
+from datetime import datetime as dt
+
+
+noOfRowsCutOff=5000
 
 def insertDataIntoGamesTable(conn):
     # Open the CSV file and create a CSV reader object
     with open('.\MySampleData\games.csv', 'r') as csv_file:     
         reader = csv.reader(csv_file, delimiter=',')
+        print(f"Inserting Rows......")
         # Skip header row
         next(reader)
-        rowNum=1
+        rowNum=0
         # Loop through each row in the CSV file
+
         for row in reader:
             # Extract values from the row
             gameId = row[0]
@@ -23,7 +29,9 @@ def insertDataIntoGamesTable(conn):
             homeTeamAbbr = row[5]
             visitorTeamAbbr = row[6]
             
-           
+            
+            
+            '''
             print(f"Inserting Row {rowNum} with data as imported below:-")
             
             print("gameId:", gameId)
@@ -34,7 +42,7 @@ def insertDataIntoGamesTable(conn):
             print("homeTeamAbbr:", homeTeamAbbr)
             print("visitorTeamAbbr:", visitorTeamAbbr)
             print("----------------------------------------------------------")
-            
+            '''
            
             cur = conn.cursor()
                 
@@ -45,10 +53,12 @@ def insertDataIntoGamesTable(conn):
             # Commit the transaction
             conn.commit()
             rowNum+=1
-            # Close the cursor and connection
-            cur.close()
-            
-            print("---------Insert Complete-------------------")
+            if(rowNum>noOfRowsCutOff):
+                break
+        print(f"Inserted {rowNum} rows.")
+        # Close the cursor
+        cur.close()
+        print("---------Insert Complete-------------------")
 
 
 def assignIntNoneOrValue(val):
@@ -139,12 +149,17 @@ def insertDataIntoPlaysTable(conn):
             'dropbackType': dropbackType, 'pff_playAction': pff_playAction, \
             'pff_passCoverage': pff_passCoverage, 'pff_passCoverageType': pff_passCoverageType})
     
+            # Commit the transaction
             conn.commit()
-            cur.close()
             rowNum+=1
+            if(rowNum>noOfRowsCutOff):
+                break
         print(f"Inserted {rowNum} rows.")
-    
-       
+        # Close the cursor
+        cur.close()
+        print("---------Insert Complete-------------------")
+        
+        
 def validate(date_text):
         try:
             datetime.date.fromisoformat(date_text)
@@ -161,7 +176,7 @@ def formatDateField(dtField):
         else:
             split=dtField.split("/")
             dt=split[2]+'-'+split[0]+'-'+split[1]
-            print(dt)
+            #print(dt)
             return dt
         
         
@@ -197,10 +212,14 @@ def insertDataIntoPlayersTable(conn):
             cur.execute(sql, values)
             rowNum+=1
     
-        # Commit changes to database and close connection
-        conn.commit()
-        cur.close()
+            # Commit the transaction
+            conn.commit()
+            if(rowNum>noOfRowsCutOff):
+                break
         print(f"Inserted {rowNum} rows.")
+        # Close the cursor
+        cur.close()
+        print("---------Insert Complete-------------------")
     
     
 
@@ -232,18 +251,23 @@ def insertDataIntoScoutingTable(conn):
             pff_backFieldBlock = assignStringNoneOrValue(row['pff_backFieldBlock'])
             
             # Define the SQL statement to insert the data into the table
-            sql = "INSERT INTO Scouting (gameId, playId, nflId, pff_role, pff_positionLinedUp, pff_hit, pff_hurry, pff_sack, pff_beatenByDefender, pff_hitAllowed, pff_hurryAllowed, pff_sackAllowed, pff_nflIdBlockedPlayer, pff_blockType, pff_backFieldBlock) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15);"
+            sql = "INSERT INTO Scouting (gameId, playId, nflId, pff_role, pff_positionLinedUp, pff_hit, pff_hurry, pff_sack, pff_beatenByDefender, pff_hitAllowed, pff_hurryAllowed, pff_sackAllowed, pff_nflIdBlockedPlayer, pff_blockType, pff_backFieldBlock) VALUES (:1, :2, :3, :4, :5, :6, :7, :8, :9, :10, :11, :12, :13, :14, :15)"
     
             # Define the values to insert into the table
             values = (gameId, playId, nflId, pff_role, pff_positionLinedUp, pff_hit, pff_hurry, pff_sack, pff_beatenByDefender, pff_hitAllowed, pff_hurryAllowed, pff_sackAllowed, pff_nflIdBlockedPlayer, pff_blockType, pff_backFieldBlock)
     
             # Execute the SQL statement with the values
             cur.execute(sql, values)
-            rowNum+=1
+
+            # Commit the transaction
             conn.commit()
-    
-        cur.close()
+            rowNum+=1
+            if(rowNum>noOfRowsCutOff):
+                break
         print(f"Inserted {rowNum} rows.")
+        # Close the cursor
+        cur.close()
+        print("---------Insert Complete-------------------")
     
     
 def assignFloatNoneOrValue(val):
@@ -301,13 +325,16 @@ def insertDataIntoTrackingSampleWeekTable(conn):
                 'event': event
             }
             cur.execute(sql, values)
-            # commit the changes to the database
+            
+            # Commit the transaction
             conn.commit()
             rowNum+=1
-    
-    # close the cursor object
-    cur.close()
-    print(f"Inserted {rowNum} rows.")
+            if(rowNum>noOfRowsCutOff):
+                break
+        print(f"Inserted {rowNum} rows.")
+        # Close the cursor
+        cur.close()
+        print("---------Insert Complete-------------------")
 
 
 
@@ -318,11 +345,19 @@ if(__name__=="__main__"):
         print(conn)
         print("Successfully connected to Oracle Database")
         print(conn.version)
+        start_time = dt.now()
+        #Uncomment the below functions one by one to import data.
+        
         #insertDataIntoGamesTable(conn)
         #insertDataIntoPlaysTable(conn)
         #insertDataIntoPlayersTable(conn)
         #insertDataIntoScoutingTable(conn)
         insertDataIntoTrackingSampleWeekTable(conn)
+        end_time = dt.now()
+        print("Elapsed time: {}".format(end_time - start_time))
+    else:
+        print("Connection Failed!!!!")
+        
         
     conn.close()
     

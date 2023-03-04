@@ -1,3 +1,30 @@
+/*
+Relations- Games, Plays, Players, Scouting, Tracking_Sample_Week
+*/
+----------------
+-----Commands Only When Very Very Required Else Do Not Run
+--PURGE RECYCLEBIN
+----------------
+--Spool avinash_spool.txt 
+--Spool avinash_spool.txt 
+--Spool off
+--------------------------------------------------------------------------------
+set heading on
+set linesize 1500
+set colsep '|'
+set numformat 99999999999999999999
+set pagesize 25000
+set echo on;
+set serveroutput on;
+Spool avinash_ameet_spool_logs.txt append;
+--------------------------------------------------------------------------------
+/*
+TABLE NAME-Games
+
+--ALTER TABLE Games DROP CONSTRAINT pk_Games_gameId;
+--DROP Table Games;
+*/
+
 CREATE TABLE Games(
     gameId NUMBER(10),
     season NUMBER(4),
@@ -9,18 +36,18 @@ CREATE TABLE Games(
     CONSTRAINT pk_Games_gameId PRIMARY KEY (gameId)
 );
 --truncate table games;
-select * from games;
+--select count(*) from games;
+--select * from games;
 
 --------------------------------------------------------------------------------
+Spool avinash_ameet_spool_logs.txt append;
 /*
 TABLE NAME-Plays
 
-ALTER TABLE Plays DROP CONSTRAINT pk_Plays_gameId_playId;
-ALTER TABLE Plays DROP CONSTRAINT fk_Plays_Game;
-DROP Table Plays;
-
+--ALTER TABLE Plays DROP CONSTRAINT pk_Plays_gameId_playId;
+--ALTER TABLE Plays DROP CONSTRAINT fk_Plays_Game;
+--DROP Table Plays;
 */
-
 
 --------------------------------------------------------------------------------
 CREATE TABLE Plays (
@@ -60,17 +87,16 @@ CREATE TABLE Plays (
     CONSTRAINT fk_Plays_Game FOREIGN KEY (gameId) REFERENCES Games(gameId) ON DELETE CASCADE
 );
 --------------------------------------------------------------------------------
-
-
 --truncate table plays;
-select * from plays order by gameid,playid asc
-select * from plays where gameid=2021090900 and playid=97;
-select count(*) from plays;
-
-
+--select * from plays order by gameid,playid asc
+--select count(*) from plays;
 --------------------------------------------------------------------------------
+Spool avinash_ameet_spool_logs.txt append;
 /*
 TABLE NAME-Players
+
+--ALTER TABLE Players DROP CONSTRAINT pk_Players;
+--DROP Table Players;
 */
 --------------------------------------------------------------------------------
 CREATE TABLE Players (
@@ -85,12 +111,18 @@ CREATE TABLE Players (
 );
 --------------------------------------------------------------------------------
 --truncate table Players;
-select * from Players;
-select count(*) from Players;
+--select * from Players;
+--select count(*) from Players;
 
 --------------------------------------------------------------------------------
+Spool avinash_ameet_spool_logs.txt append;
 /*
 TABLE NAME-Scouting
+
+--ALTER TABLE Scouting DROP CONSTRAINT pk_Scouting;
+--ALTER TABLE Scouting DROP CONSTRAINT fk_Scouting_Game;
+--ALTER TABLE Scouting DROP CONSTRAINT fk_Scouting_Players;
+--DROP Table Scouting;
 */
 --------------------------------------------------------------------------------
 CREATE TABLE Scouting (
@@ -115,18 +147,17 @@ CREATE TABLE Scouting (
 );
 --------------------------------------------------------------------------------
 --truncate table Scouting;
-select * from Scouting;
-select count(*) from Scouting;
-
-
+--select * from Scouting;
+--select count(*) from Scouting;
 --------------------------------------------------------------------------------
+Spool avinash_ameet_spool_logs.txt append;
 /*
 TABLE NAME-Tracking_Sample_Week
 
-ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT pk_Tracking_Sample_Week;
-ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Plays;
-ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Players;
-DROP Table Tracking_Sample_Week;
+--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT pk_Tracking_Sample_Week;
+--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Plays;
+--ALTER TABLE Tracking_Sample_Week DROP CONSTRAINT fk_Tracking_Sample_Week_Players;
+--DROP Table Tracking_Sample_Week;
 */
 --------------------------------------------------------------------------------
 CREATE TABLE Tracking_Sample_Week (
@@ -152,7 +183,7 @@ CREATE TABLE Tracking_Sample_Week (
 );
 --------------------------------------------------------------------------------
 --truncate table Tracking_Sample_Week;
-select * from Tracking_Sample_Week;
-select count(*) from Tracking_Sample_Week;
+--select * from Tracking_Sample_Week;
+--select count(*) from Tracking_Sample_Week;
 
---PURGE RECYCLEBIN
+spool off;
