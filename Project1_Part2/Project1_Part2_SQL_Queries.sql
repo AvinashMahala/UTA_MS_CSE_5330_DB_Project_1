@@ -1,11 +1,24 @@
+set heading on
+set linesize 1500
+set colsep '|'
+set numformat 99999999999999999999
+set pagesize 25000
+set echo on;
+set serveroutput on;
+Spool avinash_ameet_Proj_1_Part_2_spool_logs.txt append;
+/*
+Name - Avinash Mahala(1002079433) and Amit Munna Gupta(1002079433)
+Project1_Part_2
+*/
+
 /*Games,Plays,Players,Scouting,Tracking_Sample_Week*/
 Select Count(*) from Games;--122
-Select Count(*) from Plays;--5000
+Select Count(*) from Plays;--5001
 Select Count(*) From Players;--1679
-Select Count(*) from Scouting;--5000
-Select Count(*) from Tracking_Sample_Week;--5000
+Select Count(*) from Scouting;--5001
+Select Count(*) from Tracking_Sample_Week;--901
 
-
+Spool avinash_ameet_Proj_1_Part_2_spool_logs.txt append;
 -------------------------Start of Question 5----------------------------------------
 /*
 Q5)Execute 3 more Insert commands that attempt to insert 3 more records, such that the 
@@ -94,7 +107,7 @@ ORA-00001: unique constraint (AXM9433.UNIQUE_HTA_VTA_COMBINATION) violated
 -------------------------End of Question 5----------------------------------------
 
 
-
+Spool avinash_ameet_Proj_1_Part_2_spool_logs.txt append;
 -------------------------Start of Question 6----------------------------------------
 /*
 Q6)Execute a SQL command to Delete a record that violates a referential integrity 
@@ -121,6 +134,8 @@ ORA-02292: integrity constraint (AXM9433.FK_PLAYS_GAME) violated - child record 
 
 -------------------------End of Question 6----------------------------------------
 
+
+Spool avinash_ameet_Proj_1_Part_2_spool_logs.txt append;
 -------------------------Start of Question 7----------------------------------------
 /*
 Q7)Repeat 5, but Insert three new records that do not violate any integrity constraints. 
@@ -142,3 +157,9 @@ select * from Games where GameId=2051090909;
 select * from PLAYS where GameId=2051090909 and playid=2915;
 
 -------------------------End of Question 7----------------------------------------
+
+
+
+
+
+

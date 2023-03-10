@@ -332,10 +332,10 @@ if(__name__=="__main__"):
         start_time = dt.now()
         #Uncomment the below functions one by one to import data.
         
-        #insertDataIntoGamesTable(conn)
-        #insertDataIntoPlaysTable(conn)
-        #insertDataIntoPlayersTable(conn)
-        #insertDataIntoScoutingTable(conn)
+        insertDataIntoGamesTable(conn)
+        insertDataIntoPlaysTable(conn)
+        insertDataIntoPlayersTable(conn)
+        insertDataIntoScoutingTable(conn)
         insertDataIntoTrackingSampleWeekTable(conn)
         end_time = dt.now()
         print("Elapsed time: {}".format(end_time - start_time))

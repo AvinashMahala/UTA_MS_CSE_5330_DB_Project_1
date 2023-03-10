@@ -1,0 +1,190 @@
+SQL> /*
+SQL>Name - Avinash Mahala(1002079433) and Amit Munna Gupta(1002079433)
+SQL>Project1_Part_2
+SQL>*/
+SQL> 
+SQL> /*Games,Plays,Players,Scouting,Tracking_Sample_Week*/
+SQL> Select Count(*) from Games;
+SQL> --122
+SQL> Select Count(*) from Plays;
+SQL> --5001
+SQL> Select Count(*) From Players;
+SQL> --1679
+SQL> Select Count(*) from Scouting;
+SQL> --5001
+SQL> Select Count(*) from Tracking_Sample_Week;
+SQL> --901
+SQL> -------------------------Start of Question 5----------------------------------------
+SQL> /*
+SQL>Q5)Execute 3 more Insert commands that attempt to insert 3 more records, such that the 
+SQL>records violate the integrity constraints. Make each of the 3 records violate a different 
+SQL>type of integrity constraint. Capture your commands in spool files for turning in.
+SQL>*/
+SQL> 
+SQL> /*
+SQL>(a)Integrity Violation 1(Insert a duplicate primary key value):
+SQL>---------------------------------------------------
+SQL>Select * From Games where GameID = '2021090900';
+SQL>
+SQL>Here The Games Table has already a record with PrimaryKey(GameID) '2021090900'.
+SQL>But I am trying to reinsert it using the below Command.
+SQL>*/
+SQL> Insert Into Games values(2021090900,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','DAL');
+
+Error starting at line : 37 in command -
+Insert Into Games values(2021090900,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','DAL')
+Error report -
+ORA-00001: unique constraint (AXM9433.PK_GAMES_GAMEID) violated
+
+SQL> 
+SQL> /*
+SQL>----------------------------------------------------
+SQL>While Running the above Query It shows the below error in ORACLE SQL DB:
+SQL>----------------------------------------------------
+SQL>Error starting at line : 14 in command -
+SQL>Insert Into Games values(2021090900,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','DAL')
+SQL>Error report -
+SQL>ORA-00001: unique constraint (AXM9433.PK_GAMES_GAMEID) violated
+SQL>----------------------------------------------------
+SQL>*/
+SQL> --------------------------------------------------------------------------------
+SQL> 
+SQL> /*
+SQL>(b)Integrity Violation 2(Insert a foreign key value that does not exist in the parent table):
+SQL>
+SQL>Here let 'GAMES' is Parent Table and 'PLAYS' is the Child Table.
+SQL>Now We will try to insert a record in Child Table for which foreign does not exist
+SQL>in the Parent Table 'GAMES'
+SQL>
+SQL>Select * From Games where GameID = '2051090909';
+SQL>Here When We run the above Command the query result is blank as the GameID 
+SQL>'2051090909' is not present in the GAMES Table.
+SQL>
+SQL>Now lets try to insert a record in Table 'PLAYS' using '2051090909'.
+SQL>*/
+SQL> Insert into AXM9433.PLAYS (GAMEID,PLAYID,PLAYDESCRIPTION,QUARTER,DOWN,YARDSTOGO,POSSESSIONTEAM,
+  2  DEFENSIVETEAM,YARDLINESIDE,YARDLINENUMBER,GAMECLOCK,PRESNAPHOMESCORE,
+  3  PRESNAPVISITORSCORE,PASSRESULT,PENALTYYARDS,PREPENALTYPLAYRESULT,PLAYRESULT,
+  4  FOULNAME1,FOULNAME2,FOULNAME3,FOULNFLID1,FOULNFLID2,FOULNFLID3,ABSOLUTEYARDLINENUMBER,
+  5  OFFENSEFORMATION,PERSONNELO,DEFENDERSINTHEBOX,PERSONNELD,DROPBACKTYPE,PFF_PLAYACTION,
+  6  PFF_PASSCOVERAGE,PFF_PASSCOVERAGETYPE) 
+  7  values 
+  8  (2051090909,2915,'Sample Description',3,3,10,'TB','DAL','TB',33,'09:00',21,19,'I',0,0,0,
+  9  null,null,null,52421,null,null,77,'SHOTGUN','1 RB, 1 TE, 3 WR',5,'3 DL, 3 LB, 5 DB',
+ 10  'TRADITIONAL','0','Cover-2','Zone');
+
+Error starting at line : 64 in command -
+Insert into AXM9433.PLAYS (GAMEID,PLAYID,PLAYDESCRIPTION,QUARTER,DOWN,YARDSTOGO,POSSESSIONTEAM,
+DEFENSIVETEAM,YARDLINESIDE,YARDLINENUMBER,GAMECLOCK,PRESNAPHOMESCORE,
+PRESNAPVISITORSCORE,PASSRESULT,PENALTYYARDS,PREPENALTYPLAYRESULT,PLAYRESULT,
+FOULNAME1,FOULNAME2,FOULNAME3,FOULNFLID1,FOULNFLID2,FOULNFLID3,ABSOLUTEYARDLINENUMBER,
+OFFENSEFORMATION,PERSONNELO,DEFENDERSINTHEBOX,PERSONNELD,DROPBACKTYPE,PFF_PLAYACTION,
+PFF_PASSCOVERAGE,PFF_PASSCOVERAGETYPE) 
+values 
+(2051090909,2915,'Sample Description',3,3,10,'TB','DAL','TB',33,'09:00',21,19,'I',0,0,0,
+null,null,null,52421,null,null,77,'SHOTGUN','1 RB, 1 TE, 3 WR',5,'3 DL, 3 LB, 5 DB',
+'TRADITIONAL','0','Cover-2','Zone')
+Error report -
+ORA-02291: integrity constraint (AXM9433.FK_PLAYS_GAME) violated - parent key not found
+
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>Now When I ran this above command I got the Error as below:
+SQL>Error starting at line : 46 in command -
+SQL>
+SQL>Error report -
+SQL>ORA-02291: integrity constraint (AXM9433.FK_PLAYS_GAME) violated - parent key not found
+SQL>*/
+SQL> 
+SQL> --------------------------------------------------------------------------------
+SQL> /*
+SQL>
+SQL>/*
+SQL>(c)Integrity Violation 3(Violating UNIQUE Constraint):
+SQL>
+SQL>In "Games" Table the Columns (HOMETEAMABBR,VISITORTEAMABBR) together consists a Unique Key.
+SQL>If any duplicate combination is tried to insert then an error will occur.
+SQL>
+SQL>For Example the combination ('TB','DAL') is already present for a record having GameID
+SQL>'2021090900'. Now we will try to insert another record using this combination for
+SQL>new GameID.
+SQL>
+SQL>The Command is as follows:-
+SQL>*/
+SQL> Insert Into Games values(2051090909,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','DAL');
+
+Error starting at line : 98 in command -
+Insert Into Games values(2051090909,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','DAL')
+Error report -
+ORA-00001: unique constraint (AXM9433.UNIQUE_HTA_VTA_COMBINATION) violated
+
+SQL> /*
+SQL>Here although the Primary Key is different(2051090909), but the combination ('TB','DAL') has
+SQL>already been used once in the Games Table. Hence if we try to insert again it will 
+SQL>result in error as below:-
+SQL>
+SQL>Error report -
+SQL>ORA-00001: unique constraint (AXM9433.UNIQUE_HTA_VTA_COMBINATION) violated
+SQL>*/
+SQL> -------------------------End of Question 5----------------------------------------
+SQL> -------------------------Start of Question 6----------------------------------------
+SQL> /*
+SQL>Q6)Execute a SQL command to Delete a record that violates a referential integrity 
+SQL>constraint. Capture your command in a spool file for turning in.
+SQL>*/
+SQL> /*
+SQL>SELECT gameId, COUNT(*) as count
+SQL>FROM Plays
+SQL>GROUP BY gameId
+SQL>HAVING COUNT(*) > 1
+SQL>AND COUNT(*) NOT IN (SELECT COUNT(*) FROM Games WHERE gameId = Plays.gameId);
+SQL>*/
+SQL> /*
+SQL>Let Parent table be 'Games' and Child Table be 'Plays'.
+SQL>Now we will try to delete a record from parent table having gameid '2021091211'.
+SQL>The command is:-
+SQL>*/
+SQL> delete from games where gameid=2021091211;
+
+Error starting at line : 128 in command -
+delete from games where gameid=2021091211
+Error report -
+ORA-02292: integrity constraint (AXM9433.FK_PLAYS_GAME) violated - child record found
+
+SQL> /*
+SQL>The above command will result in an error stating as below:-
+SQL>Error report -
+SQL>ORA-02292: integrity constraint (AXM9433.FK_PLAYS_GAME) violated - child record found
+SQL>*/
+SQL> 
+SQL> -------------------------End of Question 6----------------------------------------
+SQL> -------------------------Start of Question 7----------------------------------------
+SQL> /*
+SQL>Q7)Repeat 5, but Insert three new records that do not violate any integrity constraints. 
+SQL>Capture your commands in spool files for turning in.
+SQL>*/
+SQL> Insert Into Games values(2061090909,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','TB','JAX');
+
+1 row inserted.
+
+SQL> 
+SQL> Insert Into Games values(2051090909,2021,1,'09-09-21','09-09-21 8:20:00.000000000 PM','ATL','DEN');
+
+1 row inserted.
+
+SQL> 
+SQL> Insert into PLAYS
+  2  values 
+  3  (2051090909,2915,'Sample Description',3,3,10,'TB','DAL','TB',33,'09:00',21,19,'I',0,0,0,
+  4  null,null,null,52421,null,null,77,'SHOTGUN','1 RB, 1 TE, 3 WR',5,'3 DL, 3 LB, 5 DB',
+  5  'TRADITIONAL','0','Cover-2','Zone');
+
+1 row inserted.
+
+SQL> 
+SQL> 
+SQL> select * from Games where GameId=2061090909;
+SQL> select * from Games where GameId=2051090909;
+SQL> select * from PLAYS where GameId=2051090909 and playid=2915;
+SQL> 
+SQL> -------------------------End of Question 7----------------------------------------

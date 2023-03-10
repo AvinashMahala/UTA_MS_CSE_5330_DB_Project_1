@@ -1,4 +1,10 @@
 /*
+Name - Avinash Mahala(1002079433) and Amit Munna Gupta(1002079433)
+Project1_Part_1
+*/
+
+
+/*
 Relations- Games, Plays, Players, Scouting, Tracking_Sample_Week
 */
 ----------------
