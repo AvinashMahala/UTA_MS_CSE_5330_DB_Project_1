@@ -1,0 +1,56 @@
+---------------------------------------------------
+Name     					- Avinash Mahala
+UTA ID   					- 1002079433
+Programming Language Used	- Python 3.9.7
+---------------------------------------------------
+
+Device Specifications:-
+---------------------------------------------------
+Processor	        Intel(R) Core(TM) i5-9300H CPU @ 2.40GHz   2.40 GHz
+Installed RAM	    24.0 GB (23.8 GB usable)
+System type	        64-bit operating system, x64-based processor
+Pen and touch	    No pen or touch input is available for this display
+Manufacturer		Acer
+Device Model		Nitro AN517-51
+---------------------------------------------------
+Windows(Operating System) Specifications:-
+---------------------------------------------------
+Edition	      	Windows 11 Home Single Language Version	21H2
+Installed on	‎Sat-‎30-‎Oct-‎2021
+OS build		22000.1219
+Experience		Windows Feature Experience Pack 1000.22000.1219.0
+---------------------------------------------------
+Python Used  	Version 3.9.7
+---------------------------------------------------
+---------------------------------------------------
+How the Code is Structured?
+---------------------------------------------------
+The directory consists of 4 items:-
+1) MySampleData Directory 		--> This contains all the input csv files as downloaded from the given Kaggle NFL Website link.
+2) avinash_ameet_spool_logs 	--> This contains all the spool logs while running the DDL Statements for creating the Tables in the Oracle SQL Database.
+3) Documentation				--> This is the readme file.
+4) LoadDataToTables.py			--> This is the script file to import the data from csv to Oracle SQL DB uing Python Scripting language.
+5) Project1_CreateTables.sql	--> This is the SQL Script where all the DDL Statements are mentioned and they can be run ad hoc when needed.
+---------------------------------------------------
+
+
+Steps:-
+1) We ran the required DDL Statements as mentioned in the  Project1_CreateTables.sql so that it will create the required tables with the required constraints.
+2) We open the "LoadDataToTables.py" in an editor such as Notepad++. Then inside main method calling at about line number 351 onwards uncomment only the required functions that need to be called in order to import data from csv file to Oracle SQL DB.
+	a) To Insert data into Games table run the uncomment only the "insertDataIntoGamesTable(conn)" and then run the .py file from command prompt. Then the records will start inserting.
+	Similarly we can do the same process for all other methods insertDataIntoPlaysTable(conn),insertDataIntoPlayersTable(conn),insertDataIntoScoutingTable(conn) and insertDataIntoTrackingSampleWeekTable(conn).
+	
+	The only assumption we need to uncomment only one method out of the 5 methods while running a particular import.
+	Also I have taken a cutoff of 5000 records per table because there is a storage space restriction in the tablespace for our user ids in oracle db.
+	
+Note:
+Before running the Python code make sure the "oracledb","csv","datetime" modules are available by running the below commands in the python console:-
+import oracledb
+import csv
+import datetime
+
+If there is no errors, then it is good to go for the methods to run, else install the modules using the below commands:-
+pip install oracledb
+pip install csv
+pip install datetime
+

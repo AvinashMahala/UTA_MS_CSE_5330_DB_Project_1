@@ -9,6 +9,15 @@ Relations- Games, Plays, Players, Scouting, Tracking_Sample_Week
 --Spool avinash_spool.txt 
 --Spool off
 --------------------------------------------------------------------------------
+/*
+Drop Queries:-
+Drop Table Tracking_Sample_Week;
+Drop Table Scouting;
+Drop Table Players;
+Drop Table Plays;
+Drop Table Games;
+*/
+
 set heading on
 set linesize 1500
 set colsep '|'
@@ -25,6 +34,8 @@ TABLE NAME-Games
 --DROP Table Games;
 */
 
+
+
 CREATE TABLE Games(
     gameId NUMBER(10),
     season NUMBER(4),
@@ -33,12 +44,14 @@ CREATE TABLE Games(
     gameTimeEastern TIMESTAMP,
     homeTeamAbbr VARCHAR2(3),
     visitorTeamAbbr VARCHAR2(3),
-    CONSTRAINT pk_Games_gameId PRIMARY KEY (gameId)
+    CONSTRAINT pk_Games_gameId PRIMARY KEY (gameId),
+    CONSTRAINT unique_hta_vta_combination UNIQUE (homeTeamAbbr,visitorTeamAbbr)
 );
---truncate table games;
+
+--delete from games;
+--truncate table games
 --select count(*) from games;
 --select * from games;
-
 --------------------------------------------------------------------------------
 Spool avinash_ameet_spool_logs.txt append;
 /*
@@ -84,7 +97,7 @@ CREATE TABLE Plays (
     pff_passCoverage VARCHAR2(100),
     pff_passCoverageType VARCHAR2(10),
     CONSTRAINT pk_Plays_gameId_playId PRIMARY KEY (gameId, playId),
-    CONSTRAINT fk_Plays_Game FOREIGN KEY (gameId) REFERENCES Games(gameId) ON DELETE CASCADE
+    CONSTRAINT fk_Plays_Game FOREIGN KEY (gameId) REFERENCES Games(gameId)
 );
 --------------------------------------------------------------------------------
 --truncate table plays;
@@ -110,10 +123,12 @@ CREATE TABLE Players (
     CONSTRAINT pk_Players PRIMARY KEY (nflId)
 );
 --------------------------------------------------------------------------------
+--delete from Players;
 --truncate table Players;
 --select * from Players;
 --select count(*) from Players;
 
+ commit;
 --------------------------------------------------------------------------------
 Spool avinash_ameet_spool_logs.txt append;
 /*
@@ -142,11 +157,13 @@ CREATE TABLE Scouting (
     pff_blockType VARCHAR2(2),
     pff_backFieldBlock CHAR(1),
     CONSTRAINT pk_Scouting PRIMARY KEY (gameId, playId, nflId),
-    CONSTRAINT fk_Scouting_Game FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
-    CONSTRAINT fk_Scouting_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+    CONSTRAINT fk_Scouting_Game FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId),
+    CONSTRAINT fk_Scouting_Players FOREIGN KEY (nflId) REFERENCES Players(nflId)
 );
+
 --------------------------------------------------------------------------------
---truncate table Scouting;
+--PURGE RECYCLEBIN
+--delete from Scouting;
 --select * from Scouting;
 --select count(*) from Scouting;
 --------------------------------------------------------------------------------
@@ -178,11 +195,12 @@ CREATE TABLE Tracking_Sample_Week (
     dir NUMBER(10,2),
     event VARCHAR2(100),
     CONSTRAINT pk_Tracking_Sample_Week PRIMARY KEY (gameId, playId, nflId, frameId),
-    CONSTRAINT fk_Tracking_Sample_Week_Plays FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId) ON DELETE CASCADE,
-    CONSTRAINT fk_Tracking_Sample_Week_Players FOREIGN KEY (nflId) REFERENCES Players(nflId) ON DELETE CASCADE
+    CONSTRAINT fk_Tracking_Sample_Week_Plays FOREIGN KEY (gameId, playId) REFERENCES Plays(gameId, playId),
+    CONSTRAINT fk_Tracking_Sample_Week_Players FOREIGN KEY (nflId) REFERENCES Players(nflId)
 );
+
 --------------------------------------------------------------------------------
---truncate table Tracking_Sample_Week;
+--delete from Tracking_Sample_Week;
 --select * from Tracking_Sample_Week;
 --select count(*) from Tracking_Sample_Week;
 
