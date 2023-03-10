@@ -1,6 +1,4 @@
-'''
-A Python Script to load the records available in given csv to the created tables in oracle db.
-'''
+
 import oracledb
 import csv
 import datetime
@@ -29,20 +27,7 @@ def insertDataIntoGamesTable(conn):
             homeTeamAbbr = row[5]
             visitorTeamAbbr = row[6]
             
-            
-            
-            '''
-            print(f"Inserting Row {rowNum} with data as imported below:-")
-            
-            print("gameId:", gameId)
-            print("season:", season)
-            print("week:", week)
-            print("gameDate:", gameDate)
-            print("gameTimeEastern:", gameTimeEastern)
-            print("homeTeamAbbr:", homeTeamAbbr)
-            print("visitorTeamAbbr:", visitorTeamAbbr)
-            print("----------------------------------------------------------")
-            '''
+       
            
             cur = conn.cursor()
                 
@@ -55,10 +40,9 @@ def insertDataIntoGamesTable(conn):
             rowNum+=1
             if(rowNum>noOfRowsCutOff):
                 break
-        print(f"Inserted {rowNum} rows.")
+
         # Close the cursor
         cur.close()
-        print("---------Insert Complete-------------------")
 
 
 def assignIntNoneOrValue(val):
@@ -78,7 +62,7 @@ def insertDataIntoPlaysTable(conn):
     rowNum=0
     with open('.\MySampleData\plays.csv') as csv_file:
         reader = csv.DictReader(csv_file)
-        print(f"Inserting Rows......")
+    
         
         for row in reader:            
             gameId = int(row['gameId'])
@@ -329,7 +313,7 @@ def insertDataIntoTrackingSampleWeekTable(conn):
             # Commit the transaction
             conn.commit()
             rowNum+=1
-            if(rowNum>noOfRowsCutOff):
+            if(rowNum>900):
                 break
         print(f"Inserted {rowNum} rows.")
         # Close the cursor
